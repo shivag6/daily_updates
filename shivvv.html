@@ -1,182 +1,212 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Modern Form with JS & jQuery</title>
+<meta charset="UTF-8">
+<title>Modern Form</title>
 
-    <!-- jQuery CDN -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <style>
-        * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
 
-        body {
-            margin: 0;
-            height: 100vh;
-            background: linear-gradient(135deg, #4f46e5, #9333ea);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #4f46e5, #9333ea);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-        .form-card {
-            background: #fff;
-            width: 420px;
-            padding: 30px;
-            border-radius: 14px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            max-height: 90vh;
-            overflow-y: auto;
-            display: none;
-        }
+.form-card {
+    background: #fff;
+    width: 420px;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    max-height: 90vh;
+    overflow-y: auto;
+    display: none;
+}
 
-        h2 { text-align: center; margin-bottom: 20px; }
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-        label { font-size: 14px; color: #555; }
+label {
+    font-size: 14px;
+    color: #555;
+}
 
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
+input,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
 
-        input:focus, select:focus, textarea:focus {
-            border-color: #6366f1;
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
-        }
+input:focus,
+textarea:focus {
+    border-color: #6366f1;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
+}
 
-        .error {
-            color: red;
-            font-size: 12px;
-            margin-bottom: 8px;
-        }
+.error {
+    color: red;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
 
-        .btn-group {
-            display: flex;
-            gap: 16px;
-        }
+.counter {
+    font-size: 12px;
+    text-align: right;
+    color: #666;
+}
 
-        button, input[type="submit"] {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            margin: auto;
-        }
+.btn-group {
+    display: flex;
+    gap: 16px;
+}
 
-        input[type="submit"] {
-            background: #6366f1;
-            color: white;
-            margin: auto;
-        }
+button,
+input[type="submit"] {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
 
-        button {
-            background: #10b981;
-            color: white;
-        }
+input[type="submit"] {
+    background: #6366f1;
+    color: white;
+}
 
-        .counter {
-            font-size: 12px;
-            text-align: right;
-            color: #666;
-        }
-    </style>
+button {
+    background: #10b981;
+    color: white;
+}
+</style>
 </head>
 
 <body>
 
 <div class="form-card">
-<h2>Modern Form</h2>
+    <h2>Modern Form</h2>
 
-<form id="myForm">
+    <form id="myForm">
 
-<label>Name</label>
-<input type="text" id="name">
-<div class="error" id="nameError"></div>
+        <label>Name</label>
+        <input type="text" id="name">
+        <div class="error" id="nameError"></div>
 
-<label>Email</label>
-<input type="email" id="email">
-<div class="error" id="emailError"></div>
+        <label>Email</label>
+        <input type="email" id="email">
+        <div class="error" id="emailError"></div>
 
-<label>Password</label>
-<input type="password" id="password">
-<div class="error" id="passError"></div>
+        <label>Password</label>
+        <input type="password" id="password">
+        <div class="error" id="passError"></div>
 
-<label>Message</label>
-<textarea id="message" rows="3" maxlength="120"></textarea>
-<div class="counter">0 / 120</div>
+        <label>Message</label>
+        <textarea id="message" rows="3" maxlength="120"></textarea>
+        <div class="counter">0 / 120</div>
 
-<div class="btn-group">
-    <input type="submit" value="Submit">
-    <button type="button" id="resetBtn">Reset</button>
-</div>
+        <div class="btn-group">
+            <input type="submit" value="Submit">
+            <button type="button" id="resetBtn">Reset</button>
+        </div>
 
-</form>
+    </form>
 </div>
 
 <script>
-/* jQuery animation on load */
-$(document).ready(function(){
-    $(".form-card").fadeIn(800);
-});
+$(function () {
 
-/* Character counter */
-$("#message").on("input", function(){
-    let len = $(this).val().length;
-    $(".counter").text(len + " / 120");
-});
+    const $form = $("#myForm");
+    const $card = $(".form-card");
+    const $counter = $(".counter");
 
-/* Form validation */
-$("#myForm").submit(function(e){
-    e.preventDefault();
+    const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
 
-    let valid = true;
-
-    $(".error").text("");
-
-    let name = $("#name").val().trim();
-    let email = $("#email").val().trim();
-    let pass = $("#password").val().trim();
-
-    if(name === ""){
-        $("#nameError").text("Name is required");
-        valid = false;
+    // --- UI helpers ---
+    function clearErrors() {
+        $(".error").text("");
     }
 
-    let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-    if(!email.match(emailPattern)){
-        $("#emailError").text("Invalid email format");
-        valid = false;
+    function resetFormUI() {
+        $form[0].reset();
+        clearErrors();
+        updateCounter(0);
     }
 
-    if(pass.length < 6){
-        $("#passError").text("Password must be 6+ characters");
-        valid = false;
+    function updateCounter(len) {
+        $counter.text(len + " / 120");
     }
 
-    if(valid){
-        alert("Form submitted successfully!");
-        $("#myForm")[0].reset();
-        $(".counter").text("0 / 120");
-    }
-});
+    // --- animations ---
+    $card.fadeIn(800);
 
-/* Reset button with animation */
-$("#resetBtn").click(function(){
-    $("#myForm")[0].reset();
-    $(".counter").text("0 / 120");
-    $(".error").text("");
-    $(".form-card").fadeOut(200).fadeIn(400);
+    // --- character counter ---
+    $("#message").on("input", function () {
+        updateCounter($(this).val().length);
+    });
+
+    // --- validation ---
+    function validateForm() {
+        let valid = true;
+
+        const name = $("#name").val().trim();
+        const email = $("#email").val().trim();
+        const pass = $("#password").val().trim();
+
+        if (!name) {
+            $("#nameError").text("Name is required");
+            valid = false;
+        }
+
+        if (!emailPattern.test(email)) {
+            $("#emailError").text("Invalid email format");
+            valid = false;
+        }
+
+        if (pass.length < 6) {
+            $("#passError").text("Password must be 6+ characters");
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    // --- submit ---
+    $form.on("submit", function (e) {
+        e.preventDefault();
+        clearErrors();
+
+        if (validateForm()) {
+            alert("Form submitted successfully!");
+            resetFormUI();
+        }
+    });
+
+    // --- reset button ---
+    $("#resetBtn").on("click", function () {
+        resetFormUI();
+        $card.fadeOut(200).fadeIn(400);
+    });
+
 });
 </script>
 
 </body>
-
-</html> 
-
-
+</html>
