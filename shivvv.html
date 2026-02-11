@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Modern Form with JS & jQuery</title>
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        * { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #4f46e5, #9333ea);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-card {
+            background: #fff;
+            width: 420px;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            max-height: 90vh;
+            overflow-y: auto;
+            display: none;
+        }
+
+        h2 { text-align: center; margin-bottom: 20px; }
+
+        label { font-size: 14px; color: #555; }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #6366f1;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 16px;
+        }
+
+        button, input[type="submit"] {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: auto;
+        }
+
+        input[type="submit"] {
+            background: #6366f1;
+            color: white;
+            margin: auto;
+        }
+
+        button {
+            background: #10b981;
+            color: white;
+        }
+
+        .counter {
+            font-size: 12px;
+            text-align: right;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="form-card">
+<h2>Modern Form</h2>
+
+<form id="myForm">
+
+<label>Name</label>
+<input type="text" id="name">
+<div class="error" id="nameError"></div>
+
+<label>Email</label>
+<input type="email" id="email">
+<div class="error" id="emailError"></div>
+
+<label>Password</label>
+<input type="password" id="password">
+<div class="error" id="passError"></div>
+
+<label>Message</label>
+<textarea id="message" rows="3" maxlength="120"></textarea>
+<div class="counter">0 / 120</div>
+
+<div class="btn-group">
+    <input type="submit" value="Submit">
+    <button type="button" id="resetBtn">Reset</button>
+</div>
+
+</form>
+</div>
+
+<script>
+/* jQuery animation on load */
+$(document).ready(function(){
+    $(".form-card").fadeIn(800);
+});
+
+/* Character counter */
+$("#message").on("input", function(){
+    let len = $(this).val().length;
+    $(".counter").text(len + " / 120");
+});
+
+/* Form validation */
+$("#myForm").submit(function(e){
+    e.preventDefault();
+
+    let valid = true;
+
+    $(".error").text("");
+
+    let name = $("#name").val().trim();
+    let email = $("#email").val().trim();
+    let pass = $("#password").val().trim();
+
+    if(name === ""){
+        $("#nameError").text("Name is required");
+        valid = false;
+    }
+
+    let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    if(!email.match(emailPattern)){
+        $("#emailError").text("Invalid email format");
+        valid = false;
+    }
+
+    if(pass.length < 6){
+        $("#passError").text("Password must be 6+ characters");
+        valid = false;
+    }
+
+    if(valid){
+        alert("Form submitted successfully!");
+        $("#myForm")[0].reset();
+        $(".counter").text("0 / 120");
+    }
+});
+
+/* Reset button with animation */
+$("#resetBtn").click(function(){
+    $("#myForm")[0].reset();
+    $(".counter").text("0 / 120");
+    $(".error").text("");
+    $(".form-card").fadeOut(200).fadeIn(400);
+});
+</script>
+
+</body>
+</html> 
